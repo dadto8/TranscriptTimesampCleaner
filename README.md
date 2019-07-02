@@ -1,17 +1,18 @@
-## **Transcript Timesamp Cleaner**
+## **Transcript Timesamp Cleaner v2**
 
 Python script to remove time / date stamps from vtt transcription files from Zoom.  easier to read when the timestamps are removed.
 
-The python code has been converted to an exe with PyInstaller.
+The python code has been converted to an exe with [PyInstaller](https://www.pyinstaller.org/).
 
 ###  **Instructions**
 
-place the exe file in a folder that's easy to find.  drop a VTT file in that directory.  
+Place vtt-clean_v2.exe any place you want (preferably easy to find or access)
+
 
 Example of raw transcrtion vtt file.
 ![Sample.vtt raw](/img/vtt-preclean.png)
 
-Then double click vtt-cleanup.exe to run the cleaner, this will create a file in the same directory with -output.txt added to the filename.
+Then double click vtt-cleanup.exe to run the cleaner, choose the file you want to clean from the dialog that comes up. after selecting the vtt file to be cleaned vtt-clean will make a new file with -output.txt at the end with only the text from the vtt file.
 
 Example of cleaned Transcription.
 ![sample.txt post process](/img/vtt-cleaned.png)
@@ -20,27 +21,25 @@ Code used in vtt-cleanup.py
 ```Python
 import re
 import os
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
 
-# read file specified in command line
-path = os.path.dirname(os.path.abspath(__file__))
+Tk().withdraw()
+filename = askopenfilename()
+vtt_file = os.path.split(filename)[1]
+outputFolder = os.path.split(filename)[0]
+os.chdir(outputFolder)
 
-# path = 'E:\\src\\Transcript Files\\test'
-vtt_file = [f for f in os.listdir(path) if f.endswith(".vtt")]
-# print(vtt_file[0])
-
-# vtt file to strip date time stamps from
-file = open(vtt_file[0], 'r')
+file = open(vtt_file, 'r')
 input_vtt = file.read()
 
-# regular expression to remove timestamps
 regex = r"^[\d\s\n].*\n"
 test_str = input_vtt
 subst = ""
 
-# output the results to a text file with the original filename plus output.txt
 result = re.sub(regex, subst, test_str, 0, re.MULTILINE)
 if result:
-    output = open(vtt_file[0] + "-output.txt", "w+")
+    output = open(vtt_file + "-output.txt", "w+")
     output.write(result)
     output.close()
 ```
