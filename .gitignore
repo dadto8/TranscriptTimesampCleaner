@@ -1,0 +1,6 @@
+# files
+*.spec
+
+# directories
+__pycache__
+build
