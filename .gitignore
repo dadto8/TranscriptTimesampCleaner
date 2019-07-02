@@ -4,3 +4,4 @@
 # directories
 __pycache__
 build
+dist
